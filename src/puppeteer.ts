@@ -1,6 +1,5 @@
 import puppeteer, { Browser, Page } from "puppeteer";
-
-export let page: Page;
+import fs from "fs-extra";
 
 export async function createBrowser() {
   const browser = await puppeteer.launch({
@@ -14,6 +13,7 @@ export async function createBrowser() {
       `--window-size=${1920},${1080}`,
     ], //chromium notifs get in the way when in non headless mode
   });
+
   return browser;
 }
 
@@ -26,4 +26,35 @@ export async function createPage(browser: Browser) {
   ); //so we don't look like a bot
 
   return page;
+}
+
+export async function clickWithText(
+  page: Page,
+  selector: "button" | "a" | "div",
+  text: string
+) {
+  await page.evaluate(
+    (selector, text) => {
+      const elementsMatchingSelector = Array.from(
+        document.querySelectorAll(selector)
+      );
+      const matchingElement = elementsMatchingSelector.find((e) =>
+        e.textContent?.includes(text)
+      );
+      if (matchingElement) matchingElement.click();
+    },
+    selector,
+    text
+  );
+}
+
+export async function typeInTextField(
+  page: Page,
+  selector: string,
+  text: string
+) {
+  await page.waitForSelector(selector);
+
+  await page.focus(selector);
+  await page.type(selector, text);
 }

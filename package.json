@@ -3,10 +3,13 @@
     "run": "ts-node src/index.ts"
   },
   "devDependencies": {
+    "@types/fs-extra": "^11.0.4",
     "ts-node": "^10.9.2",
     "typescript": "^5.4.5"
   },
   "dependencies": {
+    "dotenv": "^16.4.5",
+    "fs-extra": "^11.2.0",
     "puppeteer": "^22.6.5"
   }
 }

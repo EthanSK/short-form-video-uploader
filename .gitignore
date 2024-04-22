@@ -39,3 +39,5 @@ dist/**/*
 
 *.png
 *.jpg
+
+cookies.json
