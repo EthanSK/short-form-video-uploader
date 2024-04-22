@@ -7,10 +7,12 @@ export async function createBrowser() {
     devtools: true,
     slowMo: undefined, // might be useful for debugging
     defaultViewport: null, //so the viewport changes with window size
+    timeout: 60_000,
+    userDataDir: "./user_data", // to persist login stuff
     args: [
       "--no-sandbox",
       "--disable-notifications",
-      `--window-size=${1920},${1080}`,
+      `--window-size=${1920},${900}`,
     ], //chromium notifs get in the way when in non headless mode
   });
 
@@ -24,6 +26,7 @@ export async function createPage(browser: Browser) {
   await page.setUserAgent(
     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36"
   ); //so we don't look like a bot
+  await page.setDefaultTimeout(0); //commmend and uncomment as needed
 
   return page;
 }

@@ -41,3 +41,5 @@ dist/**/*
 *.jpg
 
 cookies.json
+
+user_data

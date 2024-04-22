@@ -12,12 +12,20 @@ export async function run(browser: Browser) {
       "Provide your Instagram username and password in the .env file"
     );
 
-  await acceptCookies(page);
-  await login(
-    page,
-    process.env.INSTAGRAM_USERNAME,
-    process.env.INSTAGRAM_PASSWORD
-  );
+  try {
+    await page.waitForSelector("::-p-text(Create)", { timeout: 10000 });
+    console.log("Already logged in to Instagram");
+    delay(4000);
+  } catch (error) {
+    console.log("Not logged in to Instagram");
+    await acceptCookies(page);
+
+    await login(
+      page,
+      process.env.INSTAGRAM_USERNAME,
+      process.env.INSTAGRAM_PASSWORD
+    );
+  }
 
   await createPost(page);
 }
