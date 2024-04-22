@@ -55,9 +55,41 @@ export async function createPost(page: Page) {
   const frame = await frameElement?.contentFrame();
   const fileInput = await frame?.waitForSelector("input[type=file]");
 
-  const fileName = "IMG_0274.MOV"; //TODO: build a proper system around this
+  const fileName = "IMG_0289.MOV"; //TODO: build a proper system around this
   await fileInput?.uploadFile(`${process.env.PATH_TO_VIDEOS}/${fileName}`);
 
   await frame?.locator(".public-DraftEditor-content").click();
+  for (let i = 0; i < 420; i++) {
+    await page.keyboard.press("Backspace");
+  }
   await page.keyboard.type(`${path.parse(fileName).name} ${HASHTAGS}`);
+
+  const duetLabel = await frame?.waitForSelector("label ::-p-text(Duet)");
+  (await duetLabel?.waitForSelector("::-p-xpath(..)"))?.click();
+
+  const stitchLabel = await frame?.waitForSelector("label ::-p-text(Stitch)");
+  (await stitchLabel?.waitForSelector("::-p-xpath(..)"))?.click();
+
+  const aiGeneratedLabel = await frame?.waitForSelector(
+    "::-p-text(AI-generated content)"
+  );
+  const aiGenParent = await aiGeneratedLabel?.waitForSelector("::-p-xpath(..)");
+  (await aiGenParent?.waitForSelector("input[type=checkbox]"))?.click();
+  try {
+    await frame
+      ?.locator('button ::-p-text("Turn on")')
+      .setTimeout(1000)
+      .click();
+  } catch (error) {
+    console.log("AI-generated content extra turn on already pressed");
+  }
+
+  await frame
+    ?.locator("button ::-p-text(Post)::-p-xpath(..)::-p-xpath(..)")
+    .setWaitForEnabled(true)
+    .click();
+
+  await frame?.locator("button ::-p-text(Manage your posts)").click();
+
+  await page.waitForNavigation({ waitUntil: "networkidle0", timeout: 120_000 });
 }
