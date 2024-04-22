@@ -20,13 +20,17 @@ export async function run(browser: Browser) {
     await page.waitForSelector("[data-e2e='login-title']", { timeout: 5000 });
     console.log("Not logged in to TikTok");
 
-    // await acceptCookies(page); //doesnt show after
+    try {
+      await acceptCookies(page);
+    } catch (error) {}
 
     await login(page, process.env.TIKTOK_USERNAME, process.env.TIKTOK_PASSWORD);
   } catch (error) {
     console.log("Already logged in to TikTok");
     delay(1000);
   }
+
+  await page.waitForNavigation({ waitUntil: "networkidle0" });
 
   await createPost(page);
 }
@@ -36,8 +40,8 @@ export async function acceptCookies(page: Page) {
 }
 
 export async function login(page: Page, username: string, password: string) {
-  getLocatorWithText(page, "Use phone / email / username").click();
-  getLocatorWithText(page, "Log in with email or username").click();
+  await getLocatorWithText(page, "Use phone / email / username").click();
+  await getLocatorWithText(page, "Log in with email or username").click();
 
   await page.locator("input[name='username']").fill(username);
   await page.locator("input[type='password']").fill(password);
@@ -48,7 +52,7 @@ export async function login(page: Page, username: string, password: string) {
 }
 
 export async function createPost(page: Page) {
-  getLocatorWithText(page, "Upload").click();
+  await getLocatorWithText(page, "Upload").click();
 
   await page.waitForSelector('iframe[data-tt="Upload_index_iframe"]');
   const frameElement = await page.$('iframe[data-tt="Upload_index_iframe"]');

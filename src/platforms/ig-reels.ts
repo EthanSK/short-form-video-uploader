@@ -52,11 +52,11 @@ export async function login(page: Page, username: string, password: string) {
 }
 
 export async function createPost(page: Page) {
-  getLocatorWithText(page, "Create").click();
+  await getLocatorWithText(page, "Create").click();
   const fileInput = await page.waitForSelector('input[type="file"]');
   const fileName = "IMG_0289.MOV"; //TODO: build a proper system around this
   await fileInput?.uploadFile(`${process.env.PATH_TO_VIDEOS}/${fileName}`);
-  getLocatorWithText(page, "OK").click();
+  await getLocatorWithText(page, "OK").click();
 
   await delay(2000);
   const selectCropButton = await page.waitForSelector(
