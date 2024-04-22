@@ -1,5 +1,12 @@
 {
+  "scripts": {
+    "run": "ts-node src/index.ts"
+  },
   "devDependencies": {
+    "ts-node": "^10.9.2",
     "typescript": "^5.4.5"
+  },
+  "dependencies": {
+    "puppeteer": "^22.6.5"
   }
 }
