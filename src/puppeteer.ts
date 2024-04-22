@@ -1,4 +1,4 @@
-import puppeteer, { Browser, Page } from "puppeteer";
+import puppeteer, { Browser, Locator, NodeFor, Page } from "puppeteer";
 import fs from "fs-extra";
 
 export async function createBrowser() {
@@ -28,33 +28,6 @@ export async function createPage(browser: Browser) {
   return page;
 }
 
-export async function clickWithText(
-  page: Page,
-  selector: "button" | "a" | "div",
-  text: string
-) {
-  await page.evaluate(
-    (selector, text) => {
-      const elementsMatchingSelector = Array.from(
-        document.querySelectorAll(selector)
-      );
-      const matchingElement = elementsMatchingSelector.find((e) =>
-        e.textContent?.includes(text)
-      );
-      if (matchingElement) matchingElement.click();
-    },
-    selector,
-    text
-  );
-}
-
-export async function typeInTextField(
-  page: Page,
-  selector: string,
-  text: string
-) {
-  await page.waitForSelector(selector);
-
-  await page.focus(selector);
-  await page.type(selector, text);
+export function getLocatorWithText(page: Page, text: string) {
+  return page.locator(`::-p-text(${text})`);
 }
