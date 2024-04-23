@@ -25,18 +25,17 @@ export async function run(browser: Browser) {
     } catch (error) {}
 
     await login(page, process.env.TIKTOK_USERNAME, process.env.TIKTOK_PASSWORD);
+    await page.waitForNavigation();
   } catch (error) {
     console.log("Already logged in to TikTok");
     delay(1000);
   }
 
-  await page.waitForNavigation({ waitUntil: "networkidle0" });
-
   await createPost(page);
 }
 
 export async function acceptCookies(page: Page) {
-  await getLocatorWithText(page, "Accept all").click();
+  await getLocatorWithText(page, "Accept all").setTimeout(3000).click();
 }
 
 export async function login(page: Page, username: string, password: string) {
@@ -59,15 +58,17 @@ export async function createPost(page: Page) {
   const frame = await frameElement?.contentFrame();
   const fileInput = await frame?.waitForSelector("input[type=file]");
 
-  const fileName = "IMG_0289.MOV"; //TODO: build a proper system around this
+  const fileName = "IMG_0296.MOV"; //TODO: build a proper system around this
   await fileInput?.uploadFile(`${process.env.PATH_TO_VIDEOS}/${fileName}`);
 
   await frame?.locator(".public-DraftEditor-content").click();
   for (let i = 0; i < 420; i++) {
     await page.keyboard.press("Backspace");
   }
-  await page.keyboard.type(`${path.parse(fileName).name} ${HASHTAGS}`);
+  // await page.keyboard.type(`${path.parse(fileName).name} ${HASHTAGS}`);
 
+  await page.keyboard.type(`ok bro ${HASHTAGS}`);
+  await delay(1000);
   const duetLabel = await frame?.waitForSelector("label ::-p-text(Duet)");
   (await duetLabel?.waitForSelector("::-p-xpath(..)"))?.click();
 
@@ -87,7 +88,7 @@ export async function createPost(page: Page) {
   } catch (error) {
     console.log("AI-generated content extra turn on already pressed");
   }
-
+  await delay(1000);
   await frame
     ?.locator("button ::-p-text(Post)::-p-xpath(..)::-p-xpath(..)")
     .setWaitForEnabled(true)

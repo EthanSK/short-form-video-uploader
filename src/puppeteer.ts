@@ -24,7 +24,7 @@ export async function createPage(browser: Browser) {
 
   await page.setCacheEnabled(true);
   await page.setUserAgent(
-    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36"
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
   ); //so we don't look like a bot
   // await page.setDefaultTimeout(0); //commmend and uncomment as needed
 
