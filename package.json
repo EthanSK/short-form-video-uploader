@@ -1,5 +1,4 @@
 {
-  "license": "SEE LICENSE IN LICENSE",
   "scripts": {
     "run": "ts-node src/index.ts"
   },
